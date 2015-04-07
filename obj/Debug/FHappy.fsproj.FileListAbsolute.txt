@@ -1,0 +1,8 @@
+c:\users\gabriel\documents\visual studio 2013\Projects\FHappy\FHappy\bin\Debug\FHappy.exe.config
+c:\users\gabriel\documents\visual studio 2013\Projects\FHappy\FHappy\bin\Debug\FHappy.XML
+c:\users\gabriel\documents\visual studio 2013\Projects\FHappy\FHappy\bin\Debug\FHappy.exe
+c:\users\gabriel\documents\visual studio 2013\Projects\FHappy\FHappy\bin\Debug\FHappy.pdb
+c:\users\gabriel\documents\visual studio 2013\Projects\FHappy\FHappy\bin\Debug\FSharp.Core.dll
+c:\users\gabriel\documents\visual studio 2013\Projects\FHappy\FHappy\bin\Debug\FSharp.Core.xml
+c:\users\gabriel\documents\visual studio 2013\Projects\FHappy\FHappy\obj\Debug\FHappy.exe
+c:\users\gabriel\documents\visual studio 2013\Projects\FHappy\FHappy\obj\Debug\FHappy.pdb
