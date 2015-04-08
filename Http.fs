@@ -36,6 +36,9 @@ type HttpBody =
 
 let UnsupportedMethods = [PUT; DELETE; CONNECT; TRACE] 
 
+let formatDate (dt:DateTime) =
+    dt.ToUniversalTime().ToString("r")
+
 let headerToRaw header =
     let header = header |> string
     let rep = Regex.Replace(header.[1..],  @"(\p{Lu})", "-$1")
@@ -98,15 +101,6 @@ type HttpResponse =
     { Status  : StatusCode
       Headers : Map<HttpResponseHeader, string>
       Body    : Option<string> }
-      static member Empty =
-        let headers = [HttpResponseHeader.Server, "FHappy"] |> Map.ofList
-        { Status = StatusCode.NoContent; Headers = headers; Body = None }
-      static member DefaultErrorResponse =
-        let headers = 
-            [ HttpResponseHeader.ContentType, "text/html"
-              HttpResponseHeader.Server,      "FHappy"] |> Map.ofList
-        let body = Some "500 Internal Server Error"
-        { Status  = StatusCode.ServerError; Headers = headers; Body = body }
       member x.Raw =
         let str = sprintf "%s %s %s\n" 
                     serverProtocol (x.Status |> int |> string) (x.Status |> statusCodeRaw) 
@@ -122,9 +116,19 @@ type HttpResponse =
         if body.Length > headers.Length then body.[..(body.Length - 3)] 
         else body
  
+let defaultRespHeaders() =
+    [ HttpResponseHeader.Server,     "FHappy"
+      HttpResponseHeader.Connection, "keep-alive"
+      HttpResponseHeader.Date,       DateTime.Now |> formatDate ] 
+      |> Map.ofList
+
 let defaultResponse = { Status  = StatusCode.OK 
-                        Headers = [HttpResponseHeader.Server, "FHappy"] |> Map.ofList
-                        Body = Some "Served by FHappy written in F#!" }
+                        Headers = defaultRespHeaders()
+                        Body    = Some "Served by FHappy written in F#!" }
+
+let defaultErrorResponse = { Status  = StatusCode.ServerError 
+                             Headers = defaultRespHeaders() 
+                             Body    = Some "500 Internal Server Error" }
             
 let parseHttpRequest (sr:BufferedStream) =
     let parseHeaders headers =
@@ -153,10 +157,7 @@ let parseHttpRequest (sr:BufferedStream) =
 
 
 let routeRequest req =
-    { Status = StatusCode.OK
-      Headers = [ HttpResponseHeader.Server, "FHappy"
-                  HttpResponseHeader.ContentType, "text/html" ] |> Map.ofList
-      Body = Some "Served by FHappy written in F#!"}
+    defaultResponse
     // Determine if it's static or dynamic content
     //match req with
 
